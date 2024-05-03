@@ -1,0 +1,486 @@
+package grocery_inventory;
+
+import javax.swing.table.DefaultTableModel;
+import Connection.ConnectionProvider;
+import javax.swing.table.TableModel;
+import javax.swing.JOptionPane;
+import java.sql.Connection;
+import java.awt.Dimension;
+import java.awt.Toolkit;
+import java.sql.*;
+
+public class CategoryPage extends javax.swing.JFrame{
+    
+    private int categoryPk = 0;
+    private javax.swing.JComboBox<String> StatusComboBox;
+    
+    public CategoryPage() {
+        initComponents();
+        
+        CategoryName.setBackground(new java.awt.Color(0, 0, 0, 0));
+
+        Toolkit toolkit = getToolkit();
+        Dimension size = toolkit.getScreenSize();
+        setLocation(size.width / 2 - getWidth() / 2, size.height / 2 - getHeight() / 2);
+        setLocationRelativeTo(null);
+    }
+    
+     private boolean validateFields() {
+        if(!CategoryName.getText().equals(""))
+        {
+            return false;
+        }
+        else
+        {
+            return true;
+        }
+     }
+    
+    
+    @SuppressWarnings("unchecked")
+    
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">                          
+    private void initComponents() {
+
+        jScrollPane2 = new javax.swing.JScrollPane();
+        CatTable = new javax.swing.JTable();
+        Back = new javax.swing.JButton();
+        CategoryID = new javax.swing.JTextField();
+        CategoryName = new javax.swing.JTextField();
+        Add = new javax.swing.JButton();
+        Delete = new javax.swing.JButton();
+        Update = new javax.swing.JButton();
+        CategoryPage = new javax.swing.JLabel();
+        UserButton = new javax.swing.JButton();
+        CategoryButton = new javax.swing.JButton();
+        ProductButton = new javax.swing.JButton();
+        CustomerButton = new javax.swing.JButton();
+        OrdersButton = new javax.swing.JButton();
+        SignOutButton = new javax.swing.JButton();
+        Item = new javax.swing.JButton();
+        Add1 = new javax.swing.JButton();
+
+        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setUndecorated(true);
+        getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        CatTable.setAutoCreateRowSorter(true);
+        CatTable.setFont(new java.awt.Font("Comic Sans MS", 1, 14)); // NOI18N
+        CatTable.setForeground(new java.awt.Color(255, 255, 255));
+        CatTable.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "Category ID", "Category Name"
+            }
+        ));
+        CatTable.setVerifyInputWhenFocusTarget(false);
+        CatTable.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                CatTableMouseClicked(evt);
+            }
+        });
+        CatTable.addComponentListener(new java.awt.event.ComponentAdapter() {
+            public void componentShown(java.awt.event.ComponentEvent evt) {
+                CatTableComponentShown(evt);
+            }
+        });
+        jScrollPane2.setViewportView(CatTable);
+
+        getContentPane().add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 100, 400, 480));
+
+        Back.setBorderPainted(false);
+        Back.setContentAreaFilled(false);
+        Back.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BackActionPerformed(evt);
+            }
+        });
+        getContentPane().add(Back, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 10, 50, 50));
+
+        CategoryID.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
+        CategoryID.setForeground(new java.awt.Color(161, 147, 123));
+        CategoryID.setBorder(null);
+        CategoryID.setBackground(new java.awt.Color(0, 0, 0, 0));
+        CategoryID.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                CategoryIDActionPerformed(evt);
+            }
+        });
+        getContentPane().add(CategoryID, new org.netbeans.lib.awtextra.AbsoluteConstraints(440, 620, 250, 40));
+
+        CategoryName.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
+        CategoryName.setForeground(new java.awt.Color(161, 147, 123));
+        CategoryName.setAlignmentX(0.8F);
+        CategoryName.setBorder(null);
+        CategoryName.setBackground(new java.awt.Color(0, 0, 0, 0));
+        CategoryName.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                CategoryNameActionPerformed(evt);
+            }
+        });
+        getContentPane().add(CategoryName, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 690, 210, 40));
+
+        Add.setBackground(new java.awt.Color(204, 255, 153));
+        Add.setBorderPainted(false);
+        Add.setContentAreaFilled(false);
+        Add.setRolloverEnabled(false);
+        Add.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                AddMouseClicked(evt);
+            }
+        });
+        Add.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                AddActionPerformed(evt);
+            }
+        });
+        getContentPane().add(Add, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 820, 120, 30));
+
+        Delete.setContentAreaFilled(false);
+        Delete.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                DeleteActionPerformed(evt);
+            }
+        });
+        getContentPane().add(Delete, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 820, 130, 30));
+
+        Update.setContentAreaFilled(false);
+        Update.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                UpdateActionPerformed(evt);
+            }
+        });
+        getContentPane().add(Update, new org.netbeans.lib.awtextra.AbsoluteConstraints(440, 820, 120, 30));
+
+        CategoryPage.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/Category.png"))); // NOI18N
+        CategoryPage.addContainerListener(new java.awt.event.ContainerAdapter() {
+            public void componentAdded(java.awt.event.ContainerEvent evt) {
+                CategoryPageComponentAdded(evt);
+            }
+        });
+        getContentPane().add(CategoryPage, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 900, 1000));
+
+        UserButton.setBorderPainted(false);
+        UserButton.setContentAreaFilled(false);
+        UserButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                UserButtonActionPerformed(evt);
+            }
+        });
+        getContentPane().add(UserButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 110, 90, 90));
+
+        CategoryButton.setBorderPainted(false);
+        CategoryButton.setContentAreaFilled(false);
+        CategoryButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                CategoryButtonActionPerformed(evt);
+            }
+        });
+        getContentPane().add(CategoryButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 320, 90, 110));
+
+        ProductButton.setBorderPainted(false);
+        ProductButton.setContentAreaFilled(false);
+        ProductButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ProductButtonActionPerformed(evt);
+            }
+        });
+        getContentPane().add(ProductButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 450, 90, 100));
+
+        CustomerButton.setBorderPainted(false);
+        CustomerButton.setContentAreaFilled(false);
+        CustomerButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                CustomerButtonActionPerformed(evt);
+            }
+        });
+        getContentPane().add(CustomerButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 220, 90, 90));
+
+        OrdersButton.setBorderPainted(false);
+        OrdersButton.setContentAreaFilled(false);
+        OrdersButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                OrdersButtonActionPerformed(evt);
+            }
+        });
+        getContentPane().add(OrdersButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 710, 90, 90));
+
+        SignOutButton.setBorderPainted(false);
+        SignOutButton.setContentAreaFilled(false);
+        SignOutButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                SignOutButtonActionPerformed(evt);
+            }
+        });
+        getContentPane().add(SignOutButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 900, 70, 80));
+
+        Item.setText("jButton1");
+        getContentPane().add(Item, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 570, -1, 110));
+
+        Add1.setBackground(new java.awt.Color(204, 255, 153));
+        Add1.setBorderPainted(false);
+        Add1.setContentAreaFilled(false);
+        Add1.setRolloverEnabled(false);
+        Add1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                Add1MouseClicked(evt);
+            }
+        });
+        Add1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                Add1ActionPerformed(evt);
+            }
+        });
+        getContentPane().add(Add1, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 820, 120, 30));
+
+        pack();
+    }// </editor-fold>                        
+
+    
+    private void BackActionPerformed(java.awt.event.ActionEvent evt) {                                     
+         setVisible(false);
+         new Main_Page().setVisible(true);
+    }                                    
+
+    private void UserButtonActionPerformed(java.awt.event.ActionEvent evt) {                                           
+         setVisible(false);
+         new UserPage().setVisible(true);
+    }                                          
+
+    private void CategoryButtonActionPerformed(java.awt.event.ActionEvent evt) {                                               
+         setVisible(false);
+         new CategoryPage().setVisible(true);
+    }                                              
+
+    private void CustomerButtonActionPerformed(java.awt.event.ActionEvent evt) {                                               
+         setVisible(false);
+         new CustomerPage().setVisible(true);
+    }                                              
+
+    private void OrdersButtonActionPerformed(java.awt.event.ActionEvent evt) {                                             
+         setVisible(false);
+         new OrderPage().setVisible(true);
+    }                                            
+
+    private void SignOutButtonActionPerformed(java.awt.event.ActionEvent evt) {                                              
+        int a = JOptionPane.showConfirmDialog(null,"Signing out?","Select",JOptionPane.YES_NO_OPTION);
+         if (a==0) {
+             setVisible(false);
+             new LogInPage().setVisible(true);
+         }
+    }                                             
+ 
+     private void formComponentShown(java.awt.event.ComponentEvent evt) {                                    
+        DefaultTableModel model = (DefaultTableModel) CatTable.getModel();
+        try {
+            Connection con = ConnectionProvider.getCon();
+            Statement st = con.createStatement();
+            ResultSet rs = st.executeQuery("select * from categories");
+            while (rs.next()) {
+                model.addRow(new Object[]{rs.getString("category_id"), rs.getString("category_name")});
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, e);
+        }
+        Update.setEnabled(false);
+    }                                   
+
+    private void ProductButtonActionPerformed(java.awt.event.ActionEvent evt) {                                              
+         setVisible(false);
+         new ProductPage().setVisible(true);                                          
+    }                                             
+
+    private void CategoryIDActionPerformed(java.awt.event.ActionEvent evt) {                                           
+
+    }                                          
+
+    private void UpdateActionPerformed(java.awt.event.ActionEvent evt) {                                       
+        //code
+        String category_name = CategoryName.getText();
+        if(validateFields()){
+            JOptionPane.showMessageDialog(null, "All fields are required");
+            
+        }
+        else{
+            try{
+                Connection con = ConnectionProvider.getCon();
+                PreparedStatement ps = con.prepareStatement("update categories set name=? where category_id =?");
+                ps.setString(1,category_name);
+                ps.setInt(2, categoryPk);
+                ps.executeUpdate();
+                JOptionPane.showMessageDialog(null, "Category Updated Successfully");
+                setVisible(false);
+                new CategoryPage().setVisible(true);
+            }
+        catch(Exception e){
+                JOptionPane.showMessageDialog(null, e);
+                
+        }
+        }
+    }                                      
+
+    private void DeleteActionPerformed(java.awt.event.ActionEvent evt) {                                       
+        
+        int response = JOptionPane.showConfirmDialog(null, "Are you sure you want to delete this category?", "Confirm", JOptionPane.YES_NO_OPTION);
+    if (response == JOptionPane.YES_OPTION) {
+        try {
+            Connection con = ConnectionProvider.getCon();
+            PreparedStatement ps = con.prepareStatement("DELETE FROM categories WHERE category_pk = ?");
+            ps.setInt(1, categoryPk);
+            int deletedRows = ps.executeUpdate();
+            if (deletedRows > 0) {
+                JOptionPane.showMessageDialog(null, "Category deleted successfully");
+                setVisible(false);
+                new CategoryPage().setVisible(true);
+            } else {
+                JOptionPane.showMessageDialog(null, "Failed to delete category");
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, e);
+        }
+    }
+    }                                      
+
+    private void CategoryNameActionPerformed(java.awt.event.ActionEvent evt) {                                             
+    
+    }                                            
+
+    private void Add1MouseClicked(java.awt.event.MouseEvent evt) {                                  
+        // TODO add your handling code here:
+    }                                 
+
+    private void Add1ActionPerformed(java.awt.event.ActionEvent evt) {                                     
+        // TODO add your handling code here:
+        
+        
+    }                                    
+
+    private void AddActionPerformed(java.awt.event.ActionEvent evt) {                                    
+        String category_name = CategoryName.getText();
+        if(validateFields()){
+            JOptionPane.showMessageDialog(null, "All fields are required");
+            
+        }
+        else{
+            try{
+                Connection con = ConnectionProvider.getCon();
+                PreparedStatement ps = con.prepareStatement("insert into categories (category_name) values(?)");
+                ps.setString(1,category_name);
+                ps.executeUpdate();
+                JOptionPane.showMessageDialog(null, "Category Added Successfully");
+                setVisible(false);
+                new CategoryPage().setVisible(true);
+            }
+        catch(Exception e){
+                JOptionPane.showMessageDialog(null, e);
+                
+        }
+        }
+    }                                   
+
+    private void AddMouseClicked(java.awt.event.MouseEvent evt) {                                 
+
+    }                                
+
+    private void CatTableMouseClicked(java.awt.event.MouseEvent evt) {                                      
+        // TODO add your handling code here:
+        int index = CatTable.getSelectedRow();
+        TableModel model = CatTable.getModel();
+        String id = model.getValueAt(index, 0).toString();
+        categoryPk = Integer.parseInt(id);
+        
+        String category_name = model.getValueAt(index, 1).toString();
+        CategoryName.setText(category_name);
+        Add.setEnabled(false);
+        Update.setEnabled(true);
+    }                                     
+
+    private void CatTableComponentShown(java.awt.event.ComponentEvent evt) {                                        
+        // TODO add your handling code here:
+        int index = CatTable.getSelectedRow();
+        TableModel model = CatTable.getModel();
+        String id = model.getValueAt(index,0).toString();
+        categoryPk -= Integer.parseInt(id);
+        
+        String category_name = model.getValueAt(index,1).toString();
+        CategoryName.setText(category_name);
+        Add.setEnabled(false);
+        Update.setEnabled(true);
+    }                                       
+
+    private void CategoryPageComponentAdded(java.awt.event.ContainerEvent evt) {                                            
+        // TODO add your handling code here:
+    }                                           
+
+    
+     
+    public static void main(String args[]) {
+        /* Set the Nimbus look and feel */
+        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
+         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+         */
+        try {
+            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+                if ("Nimbus".equals(info.getName())) {
+                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+                    break;
+                }
+            }
+        } catch (ClassNotFoundException ex) {
+            java.util.logging.Logger.getLogger(CategoryPage.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (InstantiationException ex) {
+            java.util.logging.Logger.getLogger(CategoryPage.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (IllegalAccessException ex) {
+            java.util.logging.Logger.getLogger(CategoryPage.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+            java.util.logging.Logger.getLogger(CategoryPage.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        }
+        //</editor-fold>
+        /* Create and display the form */
+        try {
+            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+                if ("Nimbus".equals(info.getName())) {
+                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+                    break;
+                }
+            }
+        } catch (ClassNotFoundException ex) {
+            java.util.logging.Logger.getLogger(CategoryPage.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (InstantiationException ex) {
+            java.util.logging.Logger.getLogger(CategoryPage.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (IllegalAccessException ex) {
+            java.util.logging.Logger.getLogger(CategoryPage.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+            java.util.logging.Logger.getLogger(CategoryPage.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        }
+        
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                new CategoryPage().setVisible(true);
+            }
+        });
+    }
+   
+    // Variables declaration - do not modify                     
+    private javax.swing.JButton Add;
+    private javax.swing.JButton Add1;
+    private javax.swing.JButton Back;
+    private javax.swing.JTable CatTable;
+    private javax.swing.JButton CategoryButton;
+    private javax.swing.JTextField CategoryID;
+    private javax.swing.JTextField CategoryName;
+    private javax.swing.JLabel CategoryPage;
+    private javax.swing.JButton CustomerButton;
+    private javax.swing.JButton Delete;
+    private javax.swing.JButton Item;
+    private javax.swing.JButton OrdersButton;
+    private javax.swing.JButton ProductButton;
+    private javax.swing.JButton SignOutButton;
+    private javax.swing.JButton Update;
+    private javax.swing.JButton UserButton;
+    private javax.swing.JScrollPane jScrollPane2;
+    // End of variables declaration                   
+}
