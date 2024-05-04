@@ -1,0 +1,542 @@
+package grocery_inventory;
+
+import java.awt.Dimension;
+import java.awt.Toolkit;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+
+
+public class CustomerPage extends javax.swing.JFrame {
+
+    private final CSVHandler csvHandler = new CSVHandler("customers.csv");
+
+    public CustomerPage() {
+        initComponents();
+
+        Toolkit toolkit = getToolkit();
+        Dimension size = toolkit.getScreenSize();
+        setLocation(size.width / 2 - getWidth() / 2, size.height / 2 - getHeight() / 2);
+
+        updateButton.addActionListener(evt -> updateButtonActionPerformed(evt));
+
+        // Add list selection listener for jTable1
+        jTable1.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+            public void valueChanged(ListSelectionEvent event) {
+                if (!event.getValueIsAdjusting()) {
+                    int selectedRow = jTable1.getSelectedRow();
+                    if (selectedRow != -1) {
+                        // Ito naglalagay ng data sa text fields when a row is selected
+                        CustomerID.setText(jTable1.getValueAt(selectedRow, 0).toString());
+                        Fname.setText(jTable1.getValueAt(selectedRow, 1).toString());
+                        PhoneNumber.setText(jTable1.getValueAt(selectedRow, 2).toString());
+                    }
+                }
+            }
+        });
+
+        // Ito naglalagay sa table ng data from the CSV file
+        populateTable();
+    }
+    
+    // Ito naglalagay sa table ng data from the CSV file
+     private void populateTable() {
+        DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
+        model.setRowCount(0); // Pang-clear ng existing rows
+
+        
+        // Nag Set ng column names
+        model.setColumnIdentifiers(new Object[]{"Customer ID", "Customer Name", "Phone Number"});
+
+        try {
+            // Ito nag Read ng data sa CSV and add to table model
+            for (String[] record : csvHandler.readData()) {
+                model.addRow(record);
+            }
+        } catch (IOException ex) {
+            JOptionPane.showMessageDialog(null, "Error reading data from CSV: " + ex.getMessage());
+        }
+    }
+
+ // Class pang handle ng CSV file operations.
+    public class CSVHandler {
+
+        private String filePath;
+
+        public CSVHandler(String filePath) {
+            this.filePath = filePath;
+        }
+
+        public List<String[]> readData() throws IOException {
+            List<String[]> data = new ArrayList<>();
+            try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    data.add(line.split(","));
+                }
+            }
+            return data;
+        }
+
+     // Ito naglalagay ng data to the CSV file.
+        public void writeData(List<String[]> data) throws IOException {
+            try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath))) {
+                for (String[] line : data) {
+                    writer.write(String.join(",", line));
+                    writer.newLine();
+                }
+            }
+        }
+
+     // Pang Update ng record sa CSV file.
+        public void updateRecord(String oldId, String newId, String name, String phone) throws IOException {
+            List<String[]> data = readData();
+            boolean found = false;
+            for (String[] record : data) {
+                if (record.length >= 3 && record[0].equals(oldId)) {
+                    record[0] = newId;
+                    record[1] = name;
+                    record[2] = phone;
+                    found = true;
+                    break;
+                }
+            }
+            if (!found) {
+                throw new IllegalArgumentException("Customer not found");
+            }
+            writeData(data);
+        }
+
+     // Pang Add ng new record sa CSV file.
+        public void addRecord(String id, String name, String phone) throws IOException {
+            List<String[]> data = readData();
+            for (String[] record : data) {
+                if (record[0].equals(id)) {
+                    throw new IllegalArgumentException("Customer ID already exists");
+                }
+            }
+            data.add(new String[]{id, name, phone});
+            writeData(data);
+        }
+
+     // Pang Delete ng record sa CSV file.
+        public void deleteRecord(String id) throws IOException {
+            List<String[]> data = readData();
+            boolean found = false;
+            for (String[] record : new ArrayList<>(data)) {
+                if (record[0].equals(id)) {
+                    data.remove(record);
+                    found = true;
+                    break;
+                }
+            }
+            if (!found) {
+                throw new IllegalArgumentException("Customer not found");
+            }
+            writeData(data);
+        }
+    }
+    
+// Pang Validate ng phone number .
+   private boolean isValidPhoneNumber(String phone) {
+    // Check if the phone number is not null and not empty
+    if (phone == null || phone.isEmpty()) {
+        return false;
+    }
+    
+    // Remove any whitespace from the phone number
+    phone = phone.replaceAll("\\s", "");
+    
+    // Check if the phone number contains only digits and has a length of 11 digits
+    if (!phone.matches("\\d{11}")) {
+        return false;
+    }
+    
+    
+    return true;
+}
+
+    @SuppressWarnings("unchecked")
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">                          
+    private void initComponents() {
+
+        BackButton = new javax.swing.JButton();
+        UserButton = new javax.swing.JButton();
+        CategoryButton = new javax.swing.JButton();
+        ProductButton = new javax.swing.JButton();
+        CustomerButton = new javax.swing.JButton();
+        OrdersButton = new javax.swing.JButton();
+        item = new javax.swing.JButton();
+        SignOutButton = new javax.swing.JButton();
+        updateButton = new javax.swing.JButton();
+        addButton = new javax.swing.JButton();
+        CustomerID = new javax.swing.JTextField();
+        Fname = new javax.swing.JTextField();
+        PhoneNumber = new javax.swing.JTextField();
+        OrderNum = new javax.swing.JTextField();
+        OrderAmount = new javax.swing.JTextField();
+        deleteButton = new javax.swing.JButton();
+        emailadd = new javax.swing.JTextField();
+        Lname = new javax.swing.JTextField();
+        City = new javax.swing.JTextField();
+        province = new javax.swing.JTextField();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jTable1 = new javax.swing.JTable();
+        jLabel1 = new javax.swing.JLabel();
+
+        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        setUndecorated(true);
+        getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        BackButton.setBorderPainted(false);
+        BackButton.setContentAreaFilled(false);
+        BackButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BackButtonActionPerformed(evt);
+            }
+        });
+        getContentPane().add(BackButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 10, 60, 50));
+
+        UserButton.setBorderPainted(false);
+        UserButton.setContentAreaFilled(false);
+        UserButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                UserButtonActionPerformed(evt);
+            }
+        });
+        getContentPane().add(UserButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 110, 90, 90));
+
+        CategoryButton.setBorderPainted(false);
+        CategoryButton.setContentAreaFilled(false);
+        CategoryButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                CategoryButtonActionPerformed(evt);
+            }
+        });
+        getContentPane().add(CategoryButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 330, 90, 90));
+
+        ProductButton.setBorderPainted(false);
+        ProductButton.setContentAreaFilled(false);
+        ProductButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ProductButtonActionPerformed(evt);
+            }
+        });
+        getContentPane().add(ProductButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 460, 90, 90));
+
+        CustomerButton.setBorderPainted(false);
+        CustomerButton.setContentAreaFilled(false);
+        CustomerButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                CustomerButtonActionPerformed(evt);
+            }
+        });
+        getContentPane().add(CustomerButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 220, 90, 90));
+
+        OrdersButton.setBorderPainted(false);
+        OrdersButton.setContentAreaFilled(false);
+        OrdersButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                OrdersButtonActionPerformed(evt);
+            }
+        });
+        getContentPane().add(OrdersButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 710, 90, 80));
+
+        item.setBorderPainted(false);
+        item.setContentAreaFilled(false);
+        getContentPane().add(item, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 580, 90, 100));
+
+        SignOutButton.setBorderPainted(false);
+        SignOutButton.setContentAreaFilled(false);
+        SignOutButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                SignOutButtonActionPerformed(evt);
+            }
+        });
+        getContentPane().add(SignOutButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 900, 50, 80));
+
+        updateButton.setBorderPainted(false);
+        updateButton.setContentAreaFilled(false);
+        updateButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                updateButtonActionPerformed(evt);
+            }
+        });
+        getContentPane().add(updateButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(440, 880, 130, 30));
+
+        addButton.setBorderPainted(false);
+        addButton.setContentAreaFilled(false);
+        addButton.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                addButtonMouseClicked(evt);
+            }
+        });
+        addButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                addButtonActionPerformed(evt);
+            }
+        });
+        getContentPane().add(addButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 880, 130, 30));
+
+        CustomerID.setBorder(null);
+        CustomerID.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                CustomerIDActionPerformed(evt);
+            }
+        });
+        getContentPane().add(CustomerID, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 530, 290, 30));
+
+        Fname.setBorder(null);
+        getContentPane().add(Fname, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 590, 270, 30));
+
+        PhoneNumber.setBorder(null);
+        getContentPane().add(PhoneNumber, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 640, 290, 30));
+
+        OrderNum.setBorder(null);
+        OrderNum.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                OrderNumActionPerformed(evt);
+            }
+        });
+        getContentPane().add(OrderNum, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 790, 190, 50));
+
+        OrderAmount.setBorder(null);
+        OrderAmount.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                OrderAmountActionPerformed(evt);
+            }
+        });
+        getContentPane().add(OrderAmount, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 790, 200, 50));
+
+        deleteButton.setBorderPainted(false);
+        deleteButton.setContentAreaFilled(false);
+        deleteButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                deleteButtonActionPerformed(evt);
+            }
+        });
+        getContentPane().add(deleteButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 880, 140, 30));
+        getContentPane().add(emailadd, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 650, 280, 30));
+        getContentPane().add(Lname, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 580, 270, 40));
+        getContentPane().add(City, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 710, 280, 30));
+        getContentPane().add(province, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 710, 290, 30));
+
+        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null}
+            },
+            new String [] {
+                "Customer ID", "Customer Name", "Phone Number"
+            }
+        ) {
+            boolean[] canEdit = new boolean [] {
+                true, true, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jScrollPane1.setViewportView(jTable1);
+
+        getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 80, 600, -1));
+
+        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/Customers.png"))); // NOI18N
+        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 900, 1000));
+
+        pack();
+    }// </editor-fold>                        
+
+    private void BackButtonActionPerformed(java.awt.event.ActionEvent evt) {                                           
+         setVisible(false);
+         new Main_Page().setVisible(true);
+    }                                          
+
+    private void UserButtonActionPerformed(java.awt.event.ActionEvent evt) {                                           
+         setVisible(false);
+         new UserPage().setVisible(true);
+    }                                          
+
+    private void CategoryButtonActionPerformed(java.awt.event.ActionEvent evt) {                                               
+         setVisible(false);
+         new CategoryPage().setVisible(true);
+    }                                              
+
+    private void CustomerButtonActionPerformed(java.awt.event.ActionEvent evt) {                                               
+
+    }                                              
+
+    private void OrdersButtonActionPerformed(java.awt.event.ActionEvent evt) {                                             
+         setVisible(false);
+         new OrderPage().setVisible(true);
+    }                                            
+
+    private void SignOutButtonActionPerformed(java.awt.event.ActionEvent evt) {                                              
+        int a = JOptionPane.showConfirmDialog(null,"Signing out?","Select",JOptionPane.YES_NO_OPTION);
+         if (a==0) {
+             setVisible(false);
+             new LogInPage().setVisible(true);
+         }
+    }                                             
+
+    private void ProductButtonActionPerformed(java.awt.event.ActionEvent evt) {                                              
+         setVisible(false);
+         new ProductPage().setVisible(true); 
+    }                                             
+
+    private void CustomerIDActionPerformed(java.awt.event.ActionEvent evt) {                                           
+    }                                          
+
+    private void addButtonMouseClicked(java.awt.event.MouseEvent evt) {                                       
+        
+    }                                      
+
+    private void OrderNumActionPerformed(java.awt.event.ActionEvent evt) {                                         
+    }                                        
+
+    private void OrderAmountActionPerformed(java.awt.event.ActionEvent evt) {                                            
+    }                                           
+
+    private void updateButtonActionPerformed(java.awt.event.ActionEvent evt) {                                             
+    String oldCustomerId = jTable1.getValueAt(jTable1.getSelectedRow(), 0).toString().trim();
+    String newCustomerId = CustomerID.getText().trim();
+    String name = Fname.getText();
+    String phone = PhoneNumber.getText();
+
+    if (oldCustomerId.isEmpty() || newCustomerId.isEmpty() || name.isEmpty() || phone.isEmpty()) {
+        JOptionPane.showMessageDialog(null, "Please fill in all fields.");
+        return;
+    }
+
+    if (!isValidPhoneNumber(phone)) {
+        JOptionPane.showMessageDialog(null, "Please enter a valid phone number.");
+        return;
+    }
+
+    try {
+        csvHandler.updateRecord(oldCustomerId, newCustomerId, name, phone);
+        JOptionPane.showMessageDialog(null, "Customer updated successfully!");
+        populateTable();
+    } catch (IOException ex) {
+        JOptionPane.showMessageDialog(null, "Error updating customer: " + ex.getMessage());
+    }
+    }                                            
+
+    private void addButtonActionPerformed(java.awt.event.ActionEvent evt) {                                          
+    String customerId = CustomerID.getText();
+    String name = Fname.getText();
+    String phone = PhoneNumber.getText();
+
+        if (customerId.isEmpty() || name.isEmpty() || phone.isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Please fill in all fields.");
+            return;
+        }
+
+        if (!isValidPhoneNumber(phone)) {
+            JOptionPane.showMessageDialog(null, "Please enter a valid phone number.");
+            return;
+        }
+
+        try {
+            csvHandler.addRecord(customerId, name, phone);
+            JOptionPane.showMessageDialog(null, "Customer added successfully!");
+            populateTable();
+            CustomerID.setText("");
+            Fname.setText("");
+            PhoneNumber.setText("");
+        } catch (IOException ex) {
+            JOptionPane.showMessageDialog(null, "Error adding customer: " + ex.getMessage());
+        }
+    }                                         
+
+    
+    private void deleteButtonActionPerformed(java.awt.event.ActionEvent evt) {                                             
+    int selectedRow = jTable1.getSelectedRow();
+    if (selectedRow == -1) {
+        JOptionPane.showMessageDialog(null, "Please select a row to delete.");
+        return;
+    }
+
+    String customerId = (String) jTable1.getValueAt(selectedRow, 0);
+
+    try {
+        csvHandler.deleteRecord(customerId);
+        JOptionPane.showMessageDialog(null, "Customer deleted successfully!");
+        populateTable();
+        
+        CustomerID.setText("");
+        Fname.setText("");
+        PhoneNumber.setText("");
+    } catch (IOException ex) {
+        JOptionPane.showMessageDialog(null, "Error deleting customer: " + ex.getMessage());
+    }
+
+    }                                            
+
+    public static void main(String args[]) {
+        /* Set the Nimbus look and feel */
+        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
+         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+         */
+        try {
+            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+                if ("Nimbus".equals(info.getName())) {
+                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+                    break;
+                }
+            }
+        } catch (ClassNotFoundException ex) {
+            java.util.logging.Logger.getLogger(CustomerPage.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (InstantiationException ex) {
+            java.util.logging.Logger.getLogger(CustomerPage.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (IllegalAccessException ex) {
+            java.util.logging.Logger.getLogger(CustomerPage.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+            java.util.logging.Logger.getLogger(CustomerPage.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        }
+        //</editor-fold>
+
+        /* Create and display the form */
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                new CustomerPage().setVisible(true);
+            }
+        });
+    }
+
+    // Variables declaration - do not modify                     
+    private javax.swing.JButton BackButton;
+    private javax.swing.JButton CategoryButton;
+    private javax.swing.JTextField City;
+    private javax.swing.JButton CustomerButton;
+    private javax.swing.JTextField CustomerID;
+    private javax.swing.JTextField Fname;
+    private javax.swing.JTextField Lname;
+    private javax.swing.JTextField OrderAmount;
+    private javax.swing.JTextField OrderNum;
+    private javax.swing.JButton OrdersButton;
+    private javax.swing.JTextField PhoneNumber;
+    private javax.swing.JButton ProductButton;
+    private javax.swing.JButton SignOutButton;
+    private javax.swing.JButton UserButton;
+    private javax.swing.JButton addButton;
+    private javax.swing.JButton deleteButton;
+    private javax.swing.JTextField emailadd;
+    private javax.swing.JButton item;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTable jTable1;
+    private javax.swing.JTextField province;
+    private javax.swing.JButton updateButton;
+    // End of variables declaration                   
+}
